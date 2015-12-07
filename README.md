@@ -1,4 +1,4 @@
-### HelperLookup
+# HelperLookup
 
 ```
 meteor add ultimatejs:helper-lookup
@@ -12,13 +12,13 @@ Check out the examples below to see how you can define methods on parent compone
 
 The workflow this will provide is one where you will define methods associated with a particular state on a designated parent component, and that will be all you have to do to put state in the correct place according to the successful "state management" pattern React has pioneered.
 
-###NOTES: 
+#NOTES: 
 
 GOTCHA: since `props` are switched out to be that of the implementing child component, you can access the parent's props via `this.ownProps` within the handler.
 
 CAVEAT: `this.someMethod(this.anotherMethod())` will not currently work. You cannot call another method as a parameter. This will be resolved in future versions.
 
-### EXAMPLE:
+# EXAMPLE:
 
 ```
 ParentComponent = React.createClass({
