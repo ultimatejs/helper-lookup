@@ -1,26 +1,31 @@
 Package.describe({
 	name: "ultimatejs:helper-lookup",
 	summary: "Blaze style method lookup & more",
-	version: '0.0.1',
+	version: '0.0.2',
 	documentation: 'README.md',
 	git: 'https://github.com/ultimatejs/helper-lookup'
 });
 
 Package.onUse(function (api) {
 	api.versionsFrom('METEOR@1.2.1');
-	api.use('underscore');
+
 	api.use('ecmascript@0.1.5');
 	
+	api.use('underscore');
 	
 	api.addFiles([
 		'helper-lookup-mixin.js',
-		'template-register-helper.js',
+		'global-helper.js',
 	]);
 
 	api.export([
 		'HelperLookup', 
-		'Template'
 	]);
+	
+  api.use([
+    'babel-runtime@0.1.4-rc.0',
+    'react-runtime@0.14.1_1'
+  ]);
 	
   api.imply([
     'babel-runtime@0.1.4-rc.0',

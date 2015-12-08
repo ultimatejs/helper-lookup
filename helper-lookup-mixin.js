@@ -1,19 +1,17 @@
-if(Meteor.isServer) return HelperLookup = {}; //so server side rendering isn't broken
-
 HelperLookup = {
-		__lookup(name, args) {
+		_lookup(name, args) {
 			let component = this;
 			let method;
 
 			//climb component tree backwards looking for first component that defines method:
 			while(component && !method) { 
 				if(component[name]) method = component[name]; //component has method 
-				else component = component.props.__parent; 		//or we climb to next parent
+				else component = component.props && component.props.__parent; 		//or we climb to next parent
 			}
 			
 			//look for global helper:
-			if(!method && Template.__helpers[name]) {
-				return Template.__helpers[name].apply(this, args);
+			if(!method && React.__helpers[name]) {
+				return React.__helpers[name].apply(this, args);
 			}		
 			
 			return method ? this._applyHelperWithProps(component, method, args) : ''; //dont return `undefined` in templates
@@ -30,4 +28,20 @@ HelperLookup = {
 			
 			return ret;
 		}
+};
+
+
+
+
+//since the .jsx build plugin will add `this.__lookup` to all method calls,
+//we supply this method, but fallback to standard behavior without `HelperLookup` mixin
+var oldCreateClass = React.createClass;
+
+React.createClass = function(spec) {
+	spec.__lookup = function(name, args) {
+		if(this._lookup) return this._lookup(name, args); 			//`HelperLookup` mixin used
+		else return this[name] ? this[name](...args) : '';	//standard method call behavior
+	};
+	
+	return oldCreateClass.apply(React, arguments);
 };
